@@ -5,12 +5,20 @@ on:
   repository_dispatch:
     types: [uptime]
   workflow_dispatch:
-
 jobs:
   release:
     name: Check status
     runs-on: ubuntu-latest
     steps:
-      - uses: upptime/uptime-monitor@master
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_PAT || github.token }}
+      - name: Check endpoint status
+        uses: upptime/uptime-monitor@v1.41.3
+        with:
+          command: "update"
+        env:
+          GH_PAT: ${{ secrets.GH_PAT || github.token }}
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
