@@ -1,0 +1,158 @@
+[
+  {
+    "name": "latestmodel.id (homepage)",
+    "url": "https://latestmodel.id",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "latestmodel-id-homepage",
+    "status": "up",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
+    "time": 1409,
+    "timeDay": 1409,
+    "timeWeek": 1409,
+    "timeMonth": 1409,
+    "timeYear": 1409,
+    "dailyMinutesDown": {}
+  },
+  {
+    "name": "API — health",
+    "url": "https://latestmodel.id/v1/health",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "api-health",
+    "status": "down",
+    "uptime": "13.41%",
+    "uptimeDay": "13.41%",
+    "uptimeWeek": "13.41%",
+    "uptimeMonth": "13.41%",
+    "uptimeYear": "13.41%",
+    "time": 989,
+    "timeDay": 989,
+    "timeWeek": 989,
+    "timeMonth": 989,
+    "timeYear": 989,
+    "dailyMinutesDown": {
+      "2026-05-09": 2
+    }
+  },
+  {
+    "name": "API — resolve smartest (provider-scoped)",
+    "url": "https://latestmodel.id/v1/resolve?tag=smartest&provider=anthropic&format=string",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "api-resolve-smartest-provider-scoped",
+    "status": "down",
+    "uptime": "15.15%",
+    "uptimeDay": "15.15%",
+    "uptimeWeek": "15.15%",
+    "uptimeMonth": "15.15%",
+    "uptimeYear": "15.15%",
+    "time": 1009,
+    "timeDay": 1009,
+    "timeWeek": 1009,
+    "timeMonth": 1009,
+    "timeYear": 1009,
+    "dailyMinutesDown": {
+      "2026-05-09": 1
+    }
+  },
+  {
+    "name": "API — resolve cheapest (unscoped)",
+    "url": "https://latestmodel.id/v1/resolve?tag=cheapest&format=string",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "api-resolve-cheapest-unscoped",
+    "status": "down",
+    "uptime": "17.10%",
+    "uptimeDay": "17.10%",
+    "uptimeWeek": "17.10%",
+    "uptimeMonth": "17.10%",
+    "uptimeYear": "17.10%",
+    "time": 992,
+    "timeDay": 992,
+    "timeWeek": 992,
+    "timeMonth": 992,
+    "timeYear": 992,
+    "dailyMinutesDown": {
+      "2026-05-09": 1
+    }
+  },
+  {
+    "name": "API — models list",
+    "url": "https://latestmodel.id/v1/models",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "api-models-list",
+    "status": "down",
+    "uptime": "22.05%",
+    "uptimeDay": "22.05%",
+    "uptimeWeek": "22.05%",
+    "uptimeMonth": "22.05%",
+    "uptimeYear": "22.05%",
+    "time": 271,
+    "timeDay": 271,
+    "timeWeek": 271,
+    "timeMonth": 271,
+    "timeYear": 271,
+    "dailyMinutesDown": {
+      "2026-05-09": 1
+    }
+  },
+  {
+    "name": "API — providers",
+    "url": "https://latestmodel.id/v1/providers",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "api-providers",
+    "status": "down",
+    "uptime": "29.42%",
+    "uptimeDay": "29.42%",
+    "uptimeWeek": "29.42%",
+    "uptimeMonth": "29.42%",
+    "uptimeYear": "29.42%",
+    "time": 1013,
+    "timeDay": 1013,
+    "timeWeek": 1013,
+    "timeMonth": 1013,
+    "timeYear": 1013,
+    "dailyMinutesDown": {
+      "2026-05-09": 1
+    }
+  },
+  {
+    "name": "API — tags",
+    "url": "https://latestmodel.id/v1/tags",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "api-tags",
+    "status": "down",
+    "uptime": "40.44%",
+    "uptimeDay": "40.44%",
+    "uptimeWeek": "40.44%",
+    "uptimeMonth": "40.44%",
+    "uptimeYear": "40.44%",
+    "time": 276,
+    "timeDay": 276,
+    "timeWeek": 276,
+    "timeMonth": 276,
+    "timeYear": 276,
+    "dailyMinutesDown": {
+      "2026-05-09": 0
+    }
+  },
+  {
+    "name": "OpenAPI spec",
+    "url": "https://latestmodel.id/openapi.json",
+    "icon": "https://icons.duckduckgo.com/ip3/latestmodel.id.ico",
+    "slug": "open-api-spec",
+    "status": "down",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
+    "time": 268,
+    "timeDay": 268,
+    "timeWeek": 268,
+    "timeMonth": 268,
+    "timeYear": 268,
+    "dailyMinutesDown": {}
+  }
+]
