@@ -30,10 +30,10 @@ sites:
 
 status-website:
   cname: status.latestmodel.id
-  baseUrl: /
   name: latestmodel.id status
   introTitle: Real-time service status
   introMessage: Public uptime monitor for the latestmodel.id API and website. Probed every 5 minutes from GitHub Actions.
+  logoUrl: https://latestmodel.id/favicon.svg
   theme: dark
   navbar:
     - title: Status
@@ -45,7 +45,29 @@ status-website:
   metaTags:
     - name: theme-color
       content: "#161616"
+    - name: description
+      content: Real-time uptime monitor for the latestmodel.id API and website. Probed every 5 minutes from GitHub Actions.
+    - property: og:title
+      content: latestmodel.id status
+    - property: og:description
+      content: Real-time uptime monitor for the latestmodel.id API and website.
+    - property: og:image
+      content: https://latestmodel.id/favicon.svg
+    - property: og:type
+      content: website
+    - property: og:url
+      content: https://status.latestmodel.id
+    - name: twitter:card
+      content: summary
+    - name: twitter:title
+      content: latestmodel.id status
+    - name: twitter:description
+      content: Real-time uptime monitor for the latestmodel.id API and website.
+    - name: twitter:image
+      content: https://latestmodel.id/favicon.svg
   customHeadHtml: |
+    <link rel="icon" type="image/svg+xml" href="https://latestmodel.id/favicon.svg">
+    <link rel="apple-touch-icon" href="https://latestmodel.id/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -161,7 +183,25 @@ status-website:
       margin-bottom: 3rem;
       padding: 0 !important;
     }
-    nav .container { padding: 0 1.5rem; max-width: 880px; }
+    nav .container {
+      padding: 0 1.5rem;
+      max-width: 880px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    nav .container::before {
+      content: '';
+      display: inline-block;
+      width: 1.25rem;
+      height: 1.25rem;
+      background-image: url('https://latestmodel.id/favicon.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      flex-shrink: 0;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+    }
     nav ul { justify-content: flex-start !important; gap: 0; }
     nav ul li a {
       color: var(--lm-muted-fg) !important;
@@ -199,7 +239,7 @@ status-website:
       padding: 1.125rem 1.375rem;
       margin: 0 0 0.625rem;
       box-shadow: var(--lm-shadow);
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, opacity 0.3s;
     }
     main > section:hover {
       border-color: color-mix(in oklch, var(--lm-border) 50%, var(--lm-fg));
@@ -220,6 +260,8 @@ status-website:
       flex: 1;
       min-width: 0;
     }
+    /* Hide cards that hydrated to empty (no incidents, no summary content) */
+    main > section[data-empty="1"] { display: none !important; }
     .tag {
       display: inline-flex;
       align-items: center;
@@ -389,6 +431,7 @@ status-website:
       main > section dl { grid-template-columns: 1fr; gap: 0.5rem 0; }
       nav { margin-bottom: 2rem; }
       nav .container { padding: 0 1.125rem; }
+      nav .container::before { width: 1.125rem; height: 1.125rem; }
       nav ul li a { padding: 0.875rem 0.625rem !important; font-size: 0.825rem; }
       nav ul li:first-child a { padding-left: 0 !important; }
       #lm-theme-toggle { top: 0.625rem; right: 1rem; width: 2rem; height: 2rem; }
@@ -406,6 +449,37 @@ status-website:
         document.documentElement.classList.toggle('lm-dark', next === 'dark');
         try { localStorage.setItem('lm-theme', next); } catch (err) {}
       });
+
+      function pruneEmptySections() {
+        var sections = document.querySelectorAll('main > section');
+        sections.forEach(function (s) {
+          if (s.classList.contains('live-status')) return;
+          var text = (s.textContent || '').trim();
+          var hasMeaningfulChild = s.querySelector('h1, dl, .tag, a[href], img');
+          if (!text && !hasMeaningfulChild) {
+            s.setAttribute('data-empty', '1');
+          } else {
+            s.removeAttribute('data-empty');
+          }
+        });
+      }
+
+      var attempts = 0;
+      var iv = setInterval(function () {
+        pruneEmptySections();
+        if (++attempts >= 20) clearInterval(iv);
+      }, 500);
+
+      if ('MutationObserver' in window) {
+        var mo = new MutationObserver(pruneEmptySections);
+        if (document.body) {
+          mo.observe(document.body, { childList: true, subtree: true });
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            mo.observe(document.body, { childList: true, subtree: true });
+          });
+        }
+      }
     })();
 
 assignees:
