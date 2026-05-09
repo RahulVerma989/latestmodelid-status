@@ -1,0 +1,21 @@
+name: Setup CI
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  repository_dispatch:
+    types: [setup]
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - main
+      - claude/create-uptime-status-page-Sfn2m
+
+jobs:
+  release:
+    name: Build status site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: upptime/site-action@master
+        with:
+          GH_PAT: ${{ secrets.GH_PAT }}

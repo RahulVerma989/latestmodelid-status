@@ -1,0 +1,46 @@
+owner: rahulverma989
+repo: latestmodelid-status
+
+sites:
+  - name: latestmodel.id (homepage)
+    url: https://latestmodel.id
+    method: GET
+    expectedStatusCodes: [200]
+  - name: API — health
+    url: https://latestmodel.id/v1/health
+    expectedStatusCodes: [200]
+  - name: API — resolve smartest (provider-scoped)
+    url: https://latestmodel.id/v1/resolve?tag=smartest&provider=anthropic&format=string
+    expectedStatusCodes: [200]
+  - name: API — resolve cheapest (unscoped)
+    url: https://latestmodel.id/v1/resolve?tag=cheapest&format=string
+    expectedStatusCodes: [200]
+  - name: API — models list
+    url: https://latestmodel.id/v1/models
+    expectedStatusCodes: [200]
+  - name: API — providers
+    url: https://latestmodel.id/v1/providers
+    expectedStatusCodes: [200]
+  - name: API — tags
+    url: https://latestmodel.id/v1/tags
+    expectedStatusCodes: [200]
+  - name: OpenAPI spec
+    url: https://latestmodel.id/openapi.json
+    expectedStatusCodes: [200]
+
+status-website:
+  cname: status.latestmodel.id
+  baseUrl: /
+  name: latestmodel.id status
+  introTitle: Real-time service status
+  introMessage: Public uptime monitor for the latestmodel.id API and website. Probed every 5 minutes from GitHub Actions.
+  navbar:
+    - title: Status
+      href: /
+    - title: Main site
+      href: https://latestmodel.id
+    - title: GitHub
+      href: https://github.com/rahulverma989/latestmodelid
+
+assignees:
+  - rahulverma989

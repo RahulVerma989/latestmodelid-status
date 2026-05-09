@@ -1,0 +1,16 @@
+name: Summary CI
+on:
+  schedule:
+    - cron: "0 * * * *"
+  repository_dispatch:
+    types: [summary]
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Generate summary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: upptime/status-update-action@master
+        with:
+          GH_PAT: ${{ secrets.GH_PAT }}
