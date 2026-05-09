@@ -6,27 +6,35 @@ sites:
     url: https://latestmodel.id
     method: GET
     expectedStatusCodes: [200]
+    maxRetries: 3
   - name: API — health
     url: https://latestmodel.id/v1/health
     expectedStatusCodes: [200]
+    maxRetries: 3
   - name: API — resolve smartest (provider-scoped)
     url: https://latestmodel.id/v1/resolve?tag=smartest&provider=anthropic&format=string
     expectedStatusCodes: [200]
+    maxRetries: 3
   - name: API — resolve cheapest (unscoped)
     url: https://latestmodel.id/v1/resolve?tag=cheapest&format=string
     expectedStatusCodes: [200]
+    maxRetries: 3
   - name: API — models list
     url: https://latestmodel.id/v1/models
     expectedStatusCodes: [200]
+    maxRetries: 3
   - name: API — providers
     url: https://latestmodel.id/v1/providers
     expectedStatusCodes: [200]
+    maxRetries: 3
   - name: API — tags
     url: https://latestmodel.id/v1/tags
     expectedStatusCodes: [200]
+    maxRetries: 3
   - name: OpenAPI spec
     url: https://latestmodel.id/openapi.json
     expectedStatusCodes: [200]
+    maxRetries: 3
 
 status-website:
   cname: status.latestmodel.id
@@ -44,7 +52,7 @@ status-website:
       href: https://github.com/rahulverma989/latestmodelid
   metaTags:
     - name: theme-color
-      content: "#161616"
+      content: "#1a1a1a"
     - name: description
       content: Real-time uptime monitor for the latestmodel.id API and website. Probed every 5 minutes from GitHub Actions.
     - property: og:title
@@ -66,8 +74,8 @@ status-website:
     - name: twitter:image
       content: https://latestmodel.id/favicon.svg
   customHeadHtml: |
-    <link rel="icon" type="image/svg+xml" href="https://latestmodel.id/favicon.svg">
-    <link rel="apple-touch-icon" href="https://latestmodel.id/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="https://latestmodel.id/favicon.svg?v=2">
+    <link rel="apple-touch-icon" href="https://latestmodel.id/favicon.svg?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -75,7 +83,14 @@ status-website:
       (function () {
         try {
           var stored = localStorage.getItem('lm-theme');
-          var theme = stored === 'light' ? 'light' : 'dark';
+          var theme;
+          if (stored === 'light' || stored === 'dark') {
+            theme = stored;
+          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            theme = 'light';
+          } else {
+            theme = 'dark';
+          }
           document.documentElement.classList.toggle('lm-light', theme === 'light');
           document.documentElement.classList.toggle('lm-dark', theme === 'dark');
         } catch (e) {
@@ -91,12 +106,12 @@ status-website:
   css: |
     :root,
     html.lm-dark {
-      --body-background-color: oklch(0.27 0 0);
+      --body-background-color: oklch(0.21 0 0);
       --body-text-color: oklch(0.81 0.01 93.53);
-      --card-background-color: oklch(0.31 0 0);
-      --card-border-color: oklch(0.36 0.01 106.85);
-      --nav-background-color: oklch(0.27 0 0);
-      --nav-border-bottom-color: oklch(0.36 0.01 106.85);
+      --card-background-color: oklch(0.27 0 0);
+      --card-border-color: oklch(0.32 0.005 100);
+      --nav-background-color: oklch(0.21 0 0);
+      --nav-border-bottom-color: oklch(0.32 0.005 100);
       --nav-current-border-bottom-color: oklch(0.67 0.13 38.92);
       --up-border-left-color: oklch(0.72 0.16 145);
       --down-border-left-color: oklch(0.64 0.21 25.39);
@@ -106,22 +121,31 @@ status-website:
       --tag-down-background-color: oklch(0.55 0.22 25);
       --tag-degraded-background-color: oklch(0.65 0.18 80);
       --code-color: oklch(0.81 0.01 93.53);
-      --code-background-color: oklch(0.22 0 0);
-      --change-background-color: oklch(0.31 0 0);
-      --lm-bg: oklch(0.27 0 0);
-      --lm-fg: oklch(0.81 0.01 93.53);
-      --lm-muted: oklch(0.22 0 0);
-      --lm-muted-fg: oklch(0.65 0.02 100);
-      --lm-card: oklch(0.31 0 0);
-      --lm-card-fg: oklch(0.98 0.01 93.48);
-      --lm-border: oklch(0.36 0.01 106.85);
+      --code-background-color: oklch(0.18 0 0);
+      --change-background-color: oklch(0.27 0 0);
+      --lm-bg: oklch(0.21 0 0);
+      --lm-bg-elevated: oklch(0.24 0 0);
+      --lm-fg: oklch(0.93 0.005 100);
+      --lm-muted: oklch(0.18 0 0);
+      --lm-muted-fg: oklch(0.62 0.01 100);
+      --lm-card: oklch(0.27 0 0);
+      --lm-card-hover: oklch(0.30 0 0);
+      --lm-card-fg: oklch(0.95 0.01 93);
+      --lm-border: oklch(0.32 0.005 100);
+      --lm-border-strong: oklch(0.42 0.01 100);
       --lm-primary: oklch(0.67 0.13 38.92);
       --lm-primary-fg: oklch(1 0 0);
       --lm-up: oklch(0.72 0.16 145);
-      --lm-down: oklch(0.64 0.21 25.39);
-      --lm-degraded: oklch(0.78 0.18 80);
-      --lm-shadow: 0 1px 3px 0 rgba(0,0,0,0.25), 0 1px 2px -1px rgba(0,0,0,0.20);
-      --lm-radius: 0.5rem;
+      --lm-up-bg: oklch(0.72 0.16 145 / 0.14);
+      --lm-down: oklch(0.66 0.21 25);
+      --lm-down-bg: oklch(0.66 0.21 25 / 0.16);
+      --lm-degraded: oklch(0.78 0.16 80);
+      --lm-degraded-bg: oklch(0.78 0.16 80 / 0.16);
+      --lm-shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.20);
+      --lm-shadow: 0 1px 3px 0 rgba(0,0,0,0.30), 0 1px 2px -1px rgba(0,0,0,0.20);
+      --lm-shadow-lg: 0 10px 30px -10px rgba(0,0,0,0.45);
+      --lm-radius: 0.625rem;
+      --lm-radius-sm: 0.4rem;
     }
     html.lm-light {
       --body-background-color: oklch(0.98 0.01 93.48);
@@ -142,20 +166,30 @@ status-website:
       --code-background-color: oklch(0.95 0.01 91.46);
       --change-background-color: oklch(0.95 0.01 91.46);
       --lm-bg: oklch(0.98 0.01 93.48);
-      --lm-fg: oklch(0.34 0.03 94.42);
+      --lm-bg-elevated: oklch(1 0 0);
+      --lm-fg: oklch(0.22 0.02 94);
       --lm-muted: oklch(0.95 0.01 91.46);
-      --lm-muted-fg: oklch(0.55 0.02 95);
+      --lm-muted-fg: oklch(0.50 0.02 95);
       --lm-card: oklch(1 0 0);
-      --lm-card-fg: oklch(0.19 0 0);
+      --lm-card-hover: oklch(0.985 0.005 93);
+      --lm-card-fg: oklch(0.18 0.01 94);
       --lm-border: oklch(0.91 0.01 106.47);
+      --lm-border-strong: oklch(0.82 0.01 100);
       --lm-primary: oklch(0.62 0.14 39.15);
       --lm-primary-fg: oklch(1 0 0);
       --lm-up: oklch(0.55 0.16 145);
+      --lm-up-bg: oklch(0.55 0.16 145 / 0.10);
       --lm-down: oklch(0.55 0.22 25);
+      --lm-down-bg: oklch(0.55 0.22 25 / 0.10);
       --lm-degraded: oklch(0.65 0.18 80);
-      --lm-shadow: 0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.06);
-      --lm-radius: 0.5rem;
+      --lm-degraded-bg: oklch(0.65 0.18 80 / 0.12);
+      --lm-shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.04);
+      --lm-shadow: 0 1px 3px 0 rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.04);
+      --lm-shadow-lg: 0 10px 30px -10px rgba(0,0,0,0.10);
+      --lm-radius: 0.625rem;
+      --lm-radius-sm: 0.4rem;
     }
+    *, *::before, *::after { box-sizing: border-box; }
     html, body {
       background: var(--lm-bg);
       color: var(--lm-fg);
@@ -164,6 +198,7 @@ status-website:
       -moz-osx-font-smoothing: grayscale;
       letter-spacing: -0.011em;
       transition: background-color 0.2s, color 0.2s;
+      font-feature-settings: "ss01", "cv11";
     }
     body { padding-bottom: 0; min-height: 100vh; }
     a { color: var(--lm-primary); text-decoration: none; transition: opacity 0.15s; }
@@ -174,78 +209,95 @@ status-website:
       letter-spacing: -0.02em;
       color: var(--lm-fg);
     }
-    code, pre { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-    .container { max-width: 880px; margin: 0 auto; padding: 0 1.5rem; }
-    main.container { padding-bottom: 4rem; }
+    code, pre {
+      font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-feature-settings: "tnum", "zero", "ss03";
+    }
+    .lm-num { font-feature-settings: "tnum"; font-variant-numeric: tabular-nums; }
+    .container { max-width: 920px; margin: 0 auto; padding: 0 1.5rem; }
+    main.container { padding-bottom: 5rem; }
+    /* NAV */
     nav {
       background: var(--lm-bg);
       border-bottom: 1px solid var(--lm-border);
       margin-bottom: 3rem;
       padding: 0 !important;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: saturate(140%) blur(8px);
+      -webkit-backdrop-filter: saturate(140%) blur(8px);
+      background: color-mix(in oklch, var(--lm-bg) 85%, transparent);
     }
-    nav .container {
-      padding: 0 1.5rem;
-      max-width: 880px;
-      display: flex;
+    nav .container { padding: 0 1.5rem; max-width: 920px; }
+    nav ul { justify-content: flex-start !important; gap: 0; align-items: center; }
+    nav ul li { display: inline-flex; align-items: center; }
+    nav ul li:first-child a img,
+    nav ul li:first-child a {
+      display: inline-flex;
       align-items: center;
-      gap: 1rem;
     }
-    nav .container::before {
-      content: '';
-      display: inline-block;
-      width: 1.25rem;
-      height: 1.25rem;
-      background-image: url('https://latestmodel.id/favicon.svg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      flex-shrink: 0;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
-    }
-    nav ul { justify-content: flex-start !important; gap: 0; }
     nav ul li a {
       color: var(--lm-muted-fg) !important;
-      padding: 1rem 1rem !important;
+      padding: 1rem 0.875rem !important;
       font-weight: 500;
       font-size: 0.875rem;
       border-bottom: 2px solid transparent;
-      display: block;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
       transition: color 0.15s, border-color 0.15s;
     }
-    nav ul li:first-child a { padding-left: 0 !important; }
+    nav ul li:first-child a { padding-left: 0 !important; gap: 0.625rem; font-weight: 600; color: var(--lm-fg) !important; font-size: 0.95rem; }
     nav ul li a:hover { color: var(--lm-fg) !important; opacity: 1; }
     nav ul li a[aria-current="page"] {
       color: var(--lm-fg) !important;
       border-bottom: 2px solid var(--lm-primary) !important;
     }
-    main > header { margin-bottom: 2rem; }
+    nav ul li a img {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+      border-radius: 0.25rem !important;
+      display: block;
+      margin: 0 !important;
+    }
+    /* Hide upptime's broken duplicate logo links if any extra */
+    nav .lm-extra-logo { display: none !important; }
+    /* HEADER */
+    main > header { margin-bottom: 2.25rem; }
     main > header h1 {
-      font-size: 2rem;
+      font-size: 2.125rem;
       font-weight: 600;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.028em;
       margin: 0 0 0.5rem;
+      line-height: 1.15;
     }
     main > header p.lead {
       font-size: 1rem;
       color: var(--lm-muted-fg);
       margin: 0;
-      max-width: 560px;
-      line-height: 1.6;
+      max-width: 580px;
+      line-height: 1.55;
     }
+    /* SECTIONS / CARDS */
     main > section {
       background: var(--lm-card);
       border: 1px solid var(--lm-border);
       border-radius: var(--lm-radius);
-      padding: 1.125rem 1.375rem;
-      margin: 0 0 0.625rem;
-      box-shadow: var(--lm-shadow);
-      transition: border-color 0.15s, opacity 0.3s;
+      padding: 0.875rem 1.125rem;
+      margin: 0 0 0.5rem;
+      box-shadow: var(--lm-shadow-sm);
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
     }
     main > section:hover {
-      border-color: color-mix(in oklch, var(--lm-border) 50%, var(--lm-fg));
+      border-color: var(--lm-border-strong);
+      box-shadow: var(--lm-shadow);
     }
+    main > section[data-empty="1"] { display: none !important; }
     main > section h1 {
-      font-size: 0.95rem;
+      font-size: 0.9375rem;
       font-weight: 500;
       margin: 0;
       display: flex;
@@ -260,8 +312,41 @@ status-website:
       flex: 1;
       min-width: 0;
     }
-    /* Hide cards that hydrated to empty (no incidents, no summary content) */
-    main > section[data-empty="1"] { display: none !important; }
+    /* Operational alert (the big "All systems are operational" card) */
+    main > section.lm-alert {
+      background: linear-gradient(135deg, var(--lm-up-bg), transparent 80%);
+      border: 1px solid color-mix(in oklch, var(--lm-up) 30%, var(--lm-border));
+      padding: 1.125rem 1.375rem;
+      margin-bottom: 2rem;
+    }
+    main > section.lm-alert h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      gap: 0.75rem;
+      color: var(--lm-fg);
+    }
+    main > section.lm-alert.lm-alert-down {
+      background: linear-gradient(135deg, var(--lm-down-bg), transparent 80%);
+      border: 1px solid color-mix(in oklch, var(--lm-down) 35%, var(--lm-border));
+    }
+    main > section.lm-alert.lm-alert-degraded {
+      background: linear-gradient(135deg, var(--lm-degraded-bg), transparent 80%);
+      border: 1px solid color-mix(in oklch, var(--lm-degraded) 35%, var(--lm-border));
+    }
+    /* SVG status icon (replaces emoji) */
+    .lm-status-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.375rem;
+      height: 1.375rem;
+      flex-shrink: 0;
+    }
+    .lm-status-icon.lm-status-up { color: var(--lm-up); }
+    .lm-status-icon.lm-status-down { color: var(--lm-down); }
+    .lm-status-icon.lm-status-degraded { color: var(--lm-degraded); }
+    .lm-status-icon svg { width: 100%; height: 100%; }
+    /* TAGS / status pills */
     .tag {
       display: inline-flex;
       align-items: center;
@@ -275,44 +360,41 @@ status-website:
       vertical-align: middle;
       flex-shrink: 0;
     }
-    .tag.up {
-      background: color-mix(in oklch, var(--lm-up) 16%, transparent) !important;
-      color: var(--lm-up) !important;
-    }
+    .tag.up { background: var(--lm-up-bg) !important; color: var(--lm-up) !important; }
     .tag.up::before {
       content: '';
       display: inline-block;
-      width: 0.4rem;
-      height: 0.4rem;
+      width: 0.42rem;
+      height: 0.42rem;
       border-radius: 50%;
       background: var(--lm-up);
       margin-right: 0.45rem;
-      box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--lm-up) 22%, transparent);
+      box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--lm-up) 24%, transparent);
+      animation: lmPulse 2.4s ease-in-out infinite;
     }
-    .tag.down {
-      background: color-mix(in oklch, var(--lm-down) 16%, transparent) !important;
-      color: var(--lm-down) !important;
-    }
+    .tag.down { background: var(--lm-down-bg) !important; color: var(--lm-down) !important; }
     .tag.down::before {
       content: '';
       display: inline-block;
-      width: 0.4rem;
-      height: 0.4rem;
+      width: 0.42rem;
+      height: 0.42rem;
       border-radius: 50%;
       background: var(--lm-down);
       margin-right: 0.45rem;
-      box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--lm-down) 22%, transparent);
+      box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--lm-down) 24%, transparent);
     }
-    .tag.degraded {
-      background: color-mix(in oklch, var(--lm-degraded) 18%, transparent) !important;
-      color: var(--lm-degraded) !important;
+    .tag.degraded { background: var(--lm-degraded-bg) !important; color: var(--lm-degraded) !important; }
+    @keyframes lmPulse {
+      0%, 100% { box-shadow: 0 0 0 0.18rem color-mix(in oklch, currentColor 24%, transparent); }
+      50%      { box-shadow: 0 0 0 0.32rem color-mix(in oklch, currentColor 8%, transparent); }
     }
+    /* DL stats inside live-status cards */
     main > section dl {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.625rem 1.5rem;
-      margin: 0.875rem 0 0 !important;
-      padding-top: 0.875rem;
+      gap: 0.5rem 1.5rem;
+      margin: 0.75rem 0 0 !important;
+      padding-top: 0.75rem;
       border-top: 1px solid var(--lm-border);
     }
     main > section dl dt {
@@ -329,7 +411,19 @@ status-website:
       color: var(--lm-fg);
       font-weight: 500;
       margin: 0;
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
     }
+    /* Tone down upptime's giant background response-time wave so it doesn't dominate */
+    main > section.live-status > svg,
+    main > section.live-status > div > svg,
+    main > section.live-status svg.svelte-graph,
+    main > section.live-status .live-status-image,
+    main > section svg[aria-hidden="true"]:not(.lm-icon) {
+      opacity: 0.45 !important;
+      filter: saturate(0.9);
+    }
+    /* "Live Status" header + period selector */
     .f.changed {
       display: flex;
       align-items: center;
@@ -337,16 +431,17 @@ status-website:
       margin: 2.5rem 0 1rem !important;
     }
     .f.changed h2 {
-      font-size: 1.05rem;
+      font-size: 1.125rem;
       font-weight: 600;
       margin: 0 !important;
       color: var(--lm-fg);
+      letter-spacing: -0.022em;
     }
     form.f.r {
       display: inline-flex;
       background: var(--lm-muted);
-      border-radius: var(--lm-radius);
-      padding: 0.25rem;
+      border-radius: var(--lm-radius-sm);
+      padding: 0.22rem;
       gap: 0.125rem;
       border: 1px solid var(--lm-border);
     }
@@ -358,21 +453,49 @@ status-website:
     }
     form.f.r label {
       cursor: pointer;
-      padding: 0.3rem 0.7rem !important;
+      padding: 0.32rem 0.7rem !important;
       font-size: 0.75rem;
       font-weight: 500;
       color: var(--lm-muted-fg);
-      border-radius: calc(var(--lm-radius) - 0.2rem);
+      border-radius: calc(var(--lm-radius-sm) - 0.18rem);
       transition: background 0.15s, color 0.15s;
       display: inline-block;
       user-select: none;
+      min-width: 2.6rem;
+      text-align: center;
     }
+    form.f.r label:hover { color: var(--lm-fg); }
     form.f.r input:checked + label {
       background: var(--lm-card);
       color: var(--lm-fg);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.10);
     }
     .loading svg { stroke: var(--lm-muted-fg) !important; opacity: 0.5; }
+    /* HISTORY (per-site) PAGE — handle the empty 7-day chart gracefully */
+    main h2 { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.018em; margin: 1.75rem 0 0.875rem; color: var(--lm-fg); }
+    main img[src*="response-time"], main img[alt*="response time"], main img[alt*="response-time"] {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--lm-radius);
+      border: 1px solid var(--lm-border);
+      background: var(--lm-bg-elevated);
+    }
+    /* Empty graph fallback via JS — adds .lm-graph-empty wrapper */
+    .lm-graph-empty {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      padding: 1.125rem 1.375rem;
+      border: 1px dashed var(--lm-border);
+      border-radius: var(--lm-radius);
+      color: var(--lm-muted-fg);
+      font-size: 0.875rem;
+      background: var(--lm-muted);
+    }
+    .lm-graph-empty svg { width: 1.5rem; height: 1.5rem; flex-shrink: 0; opacity: 0.7; }
+    /* FOOTER */
     footer {
       text-align: center;
       margin-top: 4rem !important;
@@ -389,13 +512,14 @@ status-website:
       text-decoration: none;
     }
     footer a:hover { color: var(--lm-fg); border-bottom-color: var(--lm-muted-fg); opacity: 1; }
+    /* THEME TOGGLE */
     #lm-theme-toggle {
       position: fixed;
       top: 0.875rem;
       right: 1.5rem;
       width: 2.25rem;
       height: 2.25rem;
-      border-radius: var(--lm-radius);
+      border-radius: var(--lm-radius-sm);
       border: 1px solid var(--lm-border);
       background: var(--lm-card);
       color: var(--lm-muted-fg);
@@ -406,40 +530,45 @@ status-website:
       z-index: 50;
       padding: 0;
       transition: background 0.15s, color 0.15s, border-color 0.15s;
-      box-shadow: var(--lm-shadow);
+      box-shadow: var(--lm-shadow-sm);
     }
     #lm-theme-toggle:hover {
       color: var(--lm-fg);
-      border-color: color-mix(in oklch, var(--lm-border) 40%, var(--lm-fg));
+      border-color: var(--lm-border-strong);
+      background: var(--lm-card-hover);
     }
     #lm-theme-toggle:focus-visible {
       outline: 2px solid var(--lm-primary);
       outline-offset: 2px;
     }
     #lm-theme-toggle svg { width: 1rem; height: 1rem; }
-    html.lm-dark #lm-theme-toggle .lm-icon-sun { display: block; }
-    html.lm-dark #lm-theme-toggle .lm-icon-moon { display: none; }
-    html.lm-light #lm-theme-toggle .lm-icon-sun { display: none; }
+    html.lm-dark  #lm-theme-toggle .lm-icon-sun  { display: block; }
+    html.lm-dark  #lm-theme-toggle .lm-icon-moon { display: none; }
+    html.lm-light #lm-theme-toggle .lm-icon-sun  { display: none; }
     html.lm-light #lm-theme-toggle .lm-icon-moon { display: block; }
+    /* MOBILE */
     @media (max-width: 640px) {
       .container, main.container { padding: 0 1.125rem; }
-      main.container { padding-bottom: 3rem; }
-      main > header h1 { font-size: 1.5rem; }
+      main.container { padding-bottom: 3.5rem; }
+      main > header h1 { font-size: 1.625rem; }
       main > header p.lead { font-size: 0.92rem; }
-      main > section { padding: 1rem 1.125rem; }
-      main > section h1 { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      main > section { padding: 0.875rem 1rem; }
+      main > section h1 { flex-direction: column; align-items: flex-start; gap: 0.625rem; }
       main > section dl { grid-template-columns: 1fr; gap: 0.5rem 0; }
       nav { margin-bottom: 2rem; }
       nav .container { padding: 0 1.125rem; }
-      nav .container::before { width: 1.125rem; height: 1.125rem; }
-      nav ul li a { padding: 0.875rem 0.625rem !important; font-size: 0.825rem; }
-      nav ul li:first-child a { padding-left: 0 !important; }
+      nav ul li a { padding: 0.875rem 0.5rem !important; font-size: 0.825rem; }
+      nav ul li:first-child a { padding-left: 0 !important; font-size: 0.875rem; }
+      nav ul li a img { width: 1.25rem !important; height: 1.25rem !important; }
       #lm-theme-toggle { top: 0.625rem; right: 1rem; width: 2rem; height: 2rem; }
       #lm-theme-toggle svg { width: 0.875rem; height: 0.875rem; }
       .f.changed { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
     }
   js: |
     (function () {
+      var FAVICON = 'https://latestmodel.id/favicon.svg?v=2';
+
+      // 1. Theme toggle
       document.addEventListener('click', function (e) {
         var btn = e.target && e.target.closest && e.target.closest('#lm-theme-toggle');
         if (!btn) return;
@@ -450,35 +579,180 @@ status-website:
         try { localStorage.setItem('lm-theme', next); } catch (err) {}
       });
 
+      // Follow system theme if user hasn't manually picked
+      if (window.matchMedia) {
+        try {
+          var mql = window.matchMedia('(prefers-color-scheme: light)');
+          var sync = function () {
+            try {
+              if (localStorage.getItem('lm-theme')) return;
+            } catch (err) { return; }
+            var theme = mql.matches ? 'light' : 'dark';
+            document.documentElement.classList.toggle('lm-light', theme === 'light');
+            document.documentElement.classList.toggle('lm-dark', theme === 'dark');
+          };
+          if (mql.addEventListener) mql.addEventListener('change', sync);
+          else if (mql.addListener) mql.addListener(sync);
+        } catch (err) {}
+      }
+
+      // 2. Force favicon — strip any default Upptime icon links, install ours
+      function fixFavicon() {
+        var links = document.querySelectorAll('link[rel~="icon"], link[rel="apple-touch-icon"], link[rel="shortcut icon"]');
+        var hasOurs = false;
+        links.forEach(function (link) {
+          if (link.href && link.href.indexOf('latestmodel.id/favicon') !== -1) hasOurs = true;
+          else link.parentNode && link.parentNode.removeChild(link);
+        });
+        if (!hasOurs) {
+          var l = document.createElement('link');
+          l.rel = 'icon';
+          l.type = 'image/svg+xml';
+          l.href = FAVICON;
+          document.head.appendChild(l);
+        }
+      }
+
+      // 3. Replace emoji status indicators with SVG
+      var SVG_UP = '<span class="lm-status-icon lm-status-up" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="currentColor" fill-opacity="0.16"/><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/><path d="M5.75 10.25l2.75 2.75 5.75-5.75" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+      var SVG_DOWN = '<span class="lm-status-icon lm-status-down" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="currentColor" fill-opacity="0.16"/><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"/></svg></span>';
+      var SVG_DEGRADED = '<span class="lm-status-icon lm-status-degraded" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9" fill="currentColor" fill-opacity="0.16"/><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-opacity="0.55" stroke-width="1"/><path d="M10 5.5v5" stroke="currentColor" stroke-width="1.85" stroke-linecap="round"/><circle cx="10" cy="13.75" r="0.95" fill="currentColor"/></svg></span>';
+
+      function deEmojify(root) {
+        if (!root) return;
+        var sections = root.querySelectorAll('main > section, main > section h1, main > section p');
+        sections.forEach(function (el) {
+          if (!el.innerHTML || el.dataset.lmDeemoji === '1') return;
+          var html = el.innerHTML;
+          var changed = false;
+          if (html.indexOf('✅') !== -1) { html = html.split('✅').join(SVG_UP); changed = true; }
+          if (html.indexOf('✔️') !== -1) { html = html.split('✔️').join(SVG_UP); changed = true; }
+          if (html.indexOf('🟥') !== -1) { html = html.split('🟥').join(SVG_DOWN); changed = true; }
+          if (html.indexOf('❌') !== -1) { html = html.split('❌').join(SVG_DOWN); changed = true; }
+          if (html.indexOf('🟧') !== -1) { html = html.split('🟧').join(SVG_DEGRADED); changed = true; }
+          if (html.indexOf('🟨') !== -1) { html = html.split('🟨').join(SVG_DEGRADED); changed = true; }
+          if (changed) {
+            el.innerHTML = html;
+            el.dataset.lmDeemoji = '1';
+          }
+        });
+
+        // Tag the operational alert section so we can style it bigger / status-aware
+        var firstSection = document.querySelector('main > section');
+        if (firstSection && !firstSection.classList.contains('live-status') && !firstSection.classList.contains('lm-alert')) {
+          var t = (firstSection.textContent || '').toLowerCase();
+          if (t.indexOf('all systems') !== -1 || t.indexOf('operational') !== -1 || t.indexOf('downtime') !== -1 || t.indexOf('degraded') !== -1) {
+            firstSection.classList.add('lm-alert');
+            firstSection.classList.remove('lm-alert-down', 'lm-alert-degraded');
+            if (t.indexOf('downtime') !== -1) firstSection.classList.add('lm-alert-down');
+            else if (t.indexOf('degraded') !== -1) firstSection.classList.add('lm-alert-degraded');
+          }
+        }
+      }
+
+      // 4. Hide empty placeholder cards
       function pruneEmptySections() {
-        var sections = document.querySelectorAll('main > section');
-        sections.forEach(function (s) {
-          if (s.classList.contains('live-status')) return;
+        document.querySelectorAll('main > section').forEach(function (s) {
+          if (s.classList.contains('live-status') || s.classList.contains('lm-alert')) return;
+          var hasMeaningfulChild = s.querySelector('h1, dl, .tag, a[href], img, dt');
           var text = (s.textContent || '').trim();
-          var hasMeaningfulChild = s.querySelector('h1, dl, .tag, a[href], img');
-          if (!text && !hasMeaningfulChild) {
+          if (!hasMeaningfulChild && text.length < 2) {
             s.setAttribute('data-empty', '1');
-          } else {
-            s.removeAttribute('data-empty');
           }
         });
       }
 
+      // 5. Handle missing per-site response-time graph: replace with informative empty state
+      function fixHistoryPage() {
+        var headings = document.querySelectorAll('main h2');
+        headings.forEach(function (h) {
+          if (!/response\s*time/i.test(h.textContent || '')) return;
+          var sibling = h.nextElementSibling;
+          var hasImg = false;
+          var probe = sibling;
+          while (probe) {
+            if (probe.tagName === 'IMG' || probe.querySelector && probe.querySelector('img')) { hasImg = true; break; }
+            if (probe.tagName === 'H2' || probe.tagName === 'H1') break;
+            probe = probe.nextElementSibling;
+          }
+          if (hasImg) {
+            // wire up image error → show fallback
+            var img = h.parentNode.querySelector('img') || (sibling && sibling.tagName === 'IMG' ? sibling : null);
+            if (img && !img.dataset.lmWired) {
+              img.dataset.lmWired = '1';
+              img.addEventListener('error', function () {
+                var fb = document.createElement('div');
+                fb.className = 'lm-graph-empty';
+                fb.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>Response-time chart is generated daily. It will appear here after the next Graphs CI run.</span>';
+                img.replaceWith(fb);
+              });
+            }
+            return;
+          }
+          // No image at all: insert fallback after the heading
+          if (h.nextElementSibling && h.nextElementSibling.classList && h.nextElementSibling.classList.contains('lm-graph-empty')) return;
+          var fallback = document.createElement('div');
+          fallback.className = 'lm-graph-empty';
+          fallback.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>Response-time chart is generated daily. It will appear here after the next Graphs CI run.</span>';
+          h.insertAdjacentElement('afterend', fallback);
+        });
+      }
+
+      // 6. Dynamic title reflecting current state
+      function syncTitle() {
+        var alert = document.querySelector('main > section.lm-alert');
+        if (!alert) return;
+        var base = 'latestmodel.id status';
+        if (alert.classList.contains('lm-alert-down')) document.title = '⚠ Outage • ' + base;
+        else if (alert.classList.contains('lm-alert-degraded')) document.title = '● Degraded • ' + base;
+        else document.title = '✓ All systems operational • ' + base;
+      }
+
+      // 7. Default Live Status period to 24h on first visit
+      function defaultPeriod() {
+        try {
+          if (sessionStorage.getItem('lm-period-touched')) return;
+        } catch (e) {}
+        var dayRadio = document.getElementById('data_day');
+        var weekRadio = document.getElementById('data_week');
+        if (dayRadio && weekRadio && weekRadio.checked) {
+          dayRadio.checked = true;
+          dayRadio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        document.querySelectorAll('form.f.r input[type="radio"]').forEach(function (r) {
+          if (r.dataset.lmWired) return;
+          r.dataset.lmWired = '1';
+          r.addEventListener('change', function () {
+            try { sessionStorage.setItem('lm-period-touched', '1'); } catch (e) {}
+          });
+        });
+      }
+
+      function runAll() {
+        fixFavicon();
+        deEmojify(document);
+        pruneEmptySections();
+        fixHistoryPage();
+        syncTitle();
+        defaultPeriod();
+      }
+
+      // Initial run + retry while Sapper hydrates
       var attempts = 0;
       var iv = setInterval(function () {
-        pruneEmptySections();
-        if (++attempts >= 20) clearInterval(iv);
-      }, 500);
+        runAll();
+        if (++attempts >= 24) clearInterval(iv);
+      }, 400);
 
       if ('MutationObserver' in window) {
-        var mo = new MutationObserver(pruneEmptySections);
-        if (document.body) {
-          mo.observe(document.body, { childList: true, subtree: true });
-        } else {
-          document.addEventListener('DOMContentLoaded', function () {
-            mo.observe(document.body, { childList: true, subtree: true });
-          });
-        }
+        var rafScheduled = false;
+        var mo = new MutationObserver(function () {
+          if (rafScheduled) return;
+          rafScheduled = true;
+          requestAnimationFrame(function () { rafScheduled = false; runAll(); });
+        });
+        var observe = function () { if (document.body) mo.observe(document.body, { childList: true, subtree: true }); };
+        if (document.body) observe(); else document.addEventListener('DOMContentLoaded', observe);
       }
     })();
 
